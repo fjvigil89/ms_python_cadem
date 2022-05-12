@@ -37,8 +37,10 @@ SQLALCHEMY_DATABASE_URI = f"{dbtype}://{user}:{password}@{host}:{port}/{db}"
 
 # Este codigo crea las tablas en la bd y ejecuta migraciones
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
+print('Engine: ', engine)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+print('SessionLocal: ', SessionLocal)
 
 # models.Base.metadata.create_all(bind=engine)
 

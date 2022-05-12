@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from app.routes import b2b_routes
+from app.routes.b2b_routes import item_routes
 from starlette.responses import RedirectResponse
 
 app = FastAPI()
-app.include_router(b2b_routes)
+app.include_router(item_routes)
 
 @app.get("/")
 async def root():
