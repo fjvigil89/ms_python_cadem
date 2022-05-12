@@ -16,8 +16,11 @@ Para ejecucion de estos Endpoint es necesario instalar las siguientes dependenci
 En la consola como administrador teclear el comando: 
 
 `$ pip3 install fastapi`
+
 `$ pip3 install uvicorn[standard]`
+
 `$ pip3 install pymysql`
+
 `$ pip3 install sqlalchemy`
 
 
