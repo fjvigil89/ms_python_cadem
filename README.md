@@ -39,6 +39,12 @@ base de datos a consultar.
 
 >Estos valores se deben de cambiar por los oficiales que estan en Amazon.  
 
+```
+export FLASK_DEBUG=0
+export FLASK_ENV=production
+export FLASK_APP=main.py
+
+```
 ## Utilización de los EndPoints
 
 El primer Endpoint con la url: `http://<ip_host>:<[puerto]>/update_venta`   
