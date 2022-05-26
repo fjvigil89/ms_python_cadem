@@ -59,14 +59,15 @@ def update_venta_volumen():
     try:
         _json = request.json
         _table_name = _json['table_name']
-        _iean = _json['iean']
-        if _iean and request.method == 'PUT':
+        _ean = _json['ean']
+        _retail = _json['retail']
+        if _ean and request.method == 'PUT':
             print("Ejecutando query...")
             sqlQuery = "UPDATE " + _table_name + " mv " \
                 "INNER JOIN item_master im ON mv.ean = im.i_ean " \
                 "SET mv.venta_volumen = mv.venta_unidades * im.i_factor_volumen " \
-                "WHERE mv.ean = %s "
-            bindData = (_iean)
+                "WHERE mv.ean = %s AND mv.retail = %s "
+            bindData = (_ean, _retail)
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.execute(sqlQuery, bindData)
@@ -116,17 +117,20 @@ def calculate_doh_instock():
         _json = request.json
         _table_name = _json['table_name']
         _fecha = _json['fecha']
+        _ean = _json['ean']
+        _retail = _json['retail']
         selected_date = datetime.strptime(_fecha, "%Y-%m-%d").date()
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        sql = "SELECT fecha, ean, " \
+        query = "SELECT fecha, ean, retail, " \
             "@stock_aj := IF(stock < 0 OR stock IS NULL, 0, stock) AS stock_ajustado, " \
             "@promedio := IF(promedio_ventas_uni < 0 OR promedio_ventas_uni IS NULL, 0, promedio_ventas_uni) AS promedio_ventas_uni_ajustado, " \
             "@my_doh := IF(@promedio=0, 0, @stock_aj/@promedio) AS doh, " \
             "IF(@my_doh < 1, 0, 1) AS instock " \
             "FROM " + _table_name + " " \
-            "WHERE fecha = %s "
-        cursor.execute(sql, selected_date)
+            "WHERE fecha=%s AND ean=%s AND retail=%s "
+        bindData = (selected_date, _ean, _retail)
+        cursor.execute(query, bindData)
         rows = cursor.fetchall()
         respone = jsonify(rows)
         respone.status_code = 200
