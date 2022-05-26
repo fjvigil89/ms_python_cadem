@@ -1,0 +1,73 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "CADEM API-B2B",
+    "description": "Microservicios para realizar actualizaciones y calculos y consultas"
+  },
+  "paths": {
+    "/doh-instock": {
+      "get": {
+        "tags": [
+          "DOH - INSTOCK"
+        ],
+        "description": "Microservicio cálculo DOH - INSTOCK",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "table_name",
+            "required": true,
+            "description": "Nombre de la tabla (movimiento)",
+            "schema": {
+              "type": "string",
+              "example": "movimiento"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ean",
+            "required": true,
+            "description": "Fecha de solicitud",
+            "schema": {
+              "type": "string",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "fecha",
+            "required": true,
+            "description": "Codigo EAN del producto",
+            "schema": {
+              "type": "string",
+              "example": null
+            }
+          },
+          {
+            "in": "query",
+            "name": "retail",
+            "required": true,
+            "description": "Codigo Retail del cliente",
+            "schema": {
+              "type": "string",
+              "example": null
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resultado conjunto de los calculos realizados",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "hola"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
