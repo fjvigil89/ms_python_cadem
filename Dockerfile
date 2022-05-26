@@ -1,5 +1,4 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.9
-RUN apk --update add bash nano
 
 COPY . .
 ENV FLASK_DEBUG 0
