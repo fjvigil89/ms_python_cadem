@@ -81,6 +81,9 @@ En el cuerpo del Endpoint adicionar dos parámetros en formato JSON:
 * [Python](https://www.python.org): Version 3.7 (Lenguaje de desarrollo)
 * [Flask](https://flask.palletsprojects.com/en/2.1.x/) (Microframework para Microservicios) 
 
+## Execut
+docker run -p 80:80 fjvigil/b2b_api
+
 ### Autor
 Jose Ramón Vidal Wilson
 - [Email: jramonholy@gmail.com](mailto:jramonholy@gmail.com?subject=Hi% "Hi!")

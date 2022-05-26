@@ -154,6 +154,10 @@ def showMessage(error=None):
     respone.status_code = 404
     return respone
 
-
+""" 
 if __name__ == "__main__":
     app.run()
+ """
+if __name__ == "__main__":
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=80)
