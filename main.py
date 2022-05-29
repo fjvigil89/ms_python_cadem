@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from waitress import serve
 import pymysql
 from app import app
 from config import mysql
@@ -143,5 +143,9 @@ def showMessage(error=None):
     return respone
 
 
+""" 
 if __name__ == "__main__":
     app.run()
+ """
+if __name__ == "__main__":
+    serve(app, host="0.0.0.0", port=80)
