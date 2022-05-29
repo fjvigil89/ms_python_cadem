@@ -1,8 +1,8 @@
-# Proyecto CADEM API-B2B
+# Proyecto CADEM B2B-APIs Endpoint.
 
 ## Descripción
 
-Este proyecto está constituido por tres Endpoint o Microservicio.
+Este proyecto contiene desarrollado dos Endpoints o Microservicios.
 
 1- Microservicio Cálculo Venta Volumen.  
 2- Microservicio Cálculo DOH - INSTOCK.  
@@ -39,12 +39,6 @@ base de datos a consultar.
 
 >Estos valores se deben de cambiar por los oficiales que estan en Amazon.  
 
-```
-export FLASK_DEBUG=0
-export FLASK_ENV=production
-export FLASK_APP=main.py
-
-```
 ## Utilización de los EndPoints
 
 El primer Endpoint con la url: `http://<ip_host>:<[puerto]>/update_venta`   
@@ -75,14 +69,12 @@ En el cuerpo del Endpoint adicionar dos parámetros en formato JSON:
 * En ean, el código ean del item a actualizar
 * En retail, el código retail del cliente
 
+>Para probar los endpoints, introduzca en la barra de direcciones del navegador la siguiente url: https://<ip_host:puerto>/api/docs para ir a la Documentación interactiva del APIs
 
 ## Tecnologías empleadas
 
 * [Python](https://www.python.org): Version 3.7 (Lenguaje de desarrollo)
 * [Flask](https://flask.palletsprojects.com/en/2.1.x/) (Microframework para Microservicios) 
-
-## Execut
-docker run -p 80:80 fjvigil/b2b_api
 
 ### Autor
 Jose Ramón Vidal Wilson

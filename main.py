@@ -4,21 +4,29 @@ import pymysql
 from app import app
 from config import mysql
 from flask import jsonify
-from flask import flash, request
+from flask import request
+from flask import render_template
 
 
-@app.route('/')
-def root():
-    return "Bienvenido a B2B-API Endpoints!"
+@app.route('/', methods=['GET'])
+def get_root():
+    return render_template('index.html')
 
 
-@app.route('/items')
+@app.route('/api/docs')
+def get_docs():
+    print('Documentación interactiva de APIs!')
+    # url: http://127.0.0.1:5000/api/docs
+    return render_template('swaggerui.html')
+
+
+@app.route('/api/items')
 def get_items():
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        sql = "SELECT im.i_ean, im.i_item, im.i_factor_volumen, m.fecha, m.ean, m.venta_unidades, m.venta_volumen, " \
-              "(m.venta_unidades * im.i_factor_volumen) AS x_venta_volumen " \
+        sql = "SELECT im.i_ean, im.i_item, im.i_factor_volumen, m.fecha, m.venta_unidades, m.venta_volumen, " \
+              "(m.venta_unidades * im.i_factor_volumen) AS v_venta_volumen " \
               "FROM item_master im INNER JOIN movimiento m ON im.i_ean = m.ean LIMIT 10"
         cursor.execute(sql)
         rows = cursor.fetchall()
@@ -34,27 +42,7 @@ def get_items():
             conn.close()
 
 
-@app.route('/item/<string:ean_id>')
-def item_details(ean_id):
-    try:
-        print(ean_id)
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT i_ean, i_item, i_factor_volumen FROM item_master WHERE i_ean=%s", ean_id)
-        rows = cursor.fetchone()
-        respone = jsonify(rows)
-        respone.status_code = 200
-        return respone
-    except Exception as e:
-        print(e)
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-
-
-@app.route('/update_venta', methods=['PUT'])
+@app.route('/api/update-sales', methods=['PUT'])
 def update_venta_volumen():
     try:
         _json = request.json
@@ -109,7 +97,7 @@ def add_columns(table_name, column_name):
         print("Columnas creadas!")
 
 
-@app.route('/doh-instock', methods=['GET', 'POST'])
+@app.route('/api/doh-instock', methods=['GET', 'POST'])
 def calculate_doh_instock():
     # add_columns(_table_name, ' doh')
     # add_columns(_table_name, ' instock')
@@ -124,7 +112,7 @@ def calculate_doh_instock():
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         query = "SELECT fecha, ean, retail, " \
             "@stock_aj := IF(stock < 0 OR stock IS NULL, 0, stock) AS stock_ajustado, " \
-            "@promedio := IF(promedio_ventas_uni < 0 OR promedio_ventas_uni IS NULL, 0, promedio_ventas_uni) AS promedio_ventas_uni_ajustado, " \
+            "@promedio := IF(promedio_ventas_uni < 0 OR promedio_ventas_uni IS NULL, 0, promedio_ventas_uni) AS pvu_ajustado, " \
             "@my_doh := IF(@promedio=0, 0, @stock_aj/@promedio) AS doh, " \
             "IF(@my_doh < 1, 0, 1) AS instock " \
             "FROM " + _table_name + " " \
@@ -154,10 +142,6 @@ def showMessage(error=None):
     respone.status_code = 404
     return respone
 
-""" 
+
 if __name__ == "__main__":
     app.run()
- """
-if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=80)

@@ -4,7 +4,6 @@ from os import environ
 
 mysql = MySQL()
 
-# load_dotenv('.env')
 
 class Settings(object):
     db_host: str = environ.get("DB_HOST")
@@ -13,15 +12,13 @@ class Settings(object):
     db_user: str = environ.get("DB_USER")
     db_pass: str = environ.get("DB_PASS")
 
-    class Config:
-        env_file = ".env"
-
 
 def get_settings():
     return Settings()
 
 
 settings = get_settings()
+# print('HOST: ', environ.get("DB_HOST"))
 
 app.config['MYSQL_DATABASE_HOST'] = settings.db_host
 # app.config['MYSQL_DATABASE_PORT'] = settings.db_port

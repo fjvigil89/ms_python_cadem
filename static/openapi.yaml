@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+    version: "1.0.0"
+    title: "CADEM API-B2B"
+    description: "Microservicios para el Cálculo Venta Volumen y para el Cálculo DOH - INSTOCK"
+    termsOfService: "http://www.cademsmart.cl/terms/"
+    contact:
+        name: "José Ramón Vidal"
+        email: "jramonholy@gmail.com"
+    license:
+        name: "Apache 2.0"
+        url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+#servers:
+#    -   url: "www.b2b-amazon.com"
+#        description: "Servidor B2B en Amazon"
+#        variables: { }
+#    -   url: "127.0.0.1"
+#        variables: { }
+#        description: "Servidor Local"
+paths:
+    /api/items:
+        get:
+            tags:
+                - "Items (Movimientos)"
+            summary: "Items de la tabla maestra"
+            description: "Devuelve todos los items/movimientos de la tabla maestra"
+            operationId: getItems
+            parameters: [ ]
+            responses:
+                '200':
+                    description: "Query ejecutada con exito!"
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Items'
+                '404':
+                    description: "Items not found"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Items no encontrado"
+    /api/doh-instock:
+        post:
+            tags:
+                - "DOH - INSTOCK"
+            summary: "Cálculo DOH - INSTOCK"
+            description: "Microservicio Cálculo DOH - INSTOCK"
+            operationId: getDOHInStock
+            parameters: [ ]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                table_name:
+                                    description: "Tabla de la base de datos"
+                                    type: string
+                                    example: "movimiento"
+                                fecha:
+                                    description: "Fecha de solicitud"
+                                    type: string
+                                    format: "date"
+                                ean:
+                                    description: "Código del EAN"
+                                    type: string
+                                retail:
+                                    description: "Código Retail del Cliente"
+                                    type: string
+            responses:
+                '200':
+                    description: "Resultado conjunto de los cálculos realizados"
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/DOH'
+                '400':
+                    description: "Invalid request"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Error de solicitud"
+                '404':
+                    description: "Resource not found"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Recurso no encontrado"
+    /api/update-sales:
+        put:
+            tags:
+                - "Venta Volumen"
+            summary: "Cálculo de Venta Volumen"
+            description: "Microservicio Cálculo de Venta Volumen"
+            operationId: getVolumenSales
+            parameters: [ ]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                table_name:
+                                    description: "Tabla de la base de datos"
+                                    type: string
+                                    example: "movimiento"
+                                ean:
+                                    description: "Código del EAN"
+                                    type: string
+                                retail:
+                                    description: "Código Retail del Cliente"
+                                    type: string
+            responses:
+                '200':
+                    description: "Query ejecutada con exito"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Volumen de venta calculado con exito!"
+                '404':
+                    description: "Resource not found"
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                        example: "Recurso no encontrado"
+components:
+    schemas:
+        Items:
+            type: object
+            properties:
+                i_ean:
+                    type: string
+                i_item:
+                    type: string
+                    example: "Item Stock"
+                i_factor_volumen:
+                    type: number
+                fecha:
+                    type: string
+                    format: "date"
+                venta_unidades:
+                    type: number
+                venta_volumen:
+                    type: number
+                v_venta_volumen:
+                    type: number
+        DOH:
+            type: object
+            properties:
+                fecha:
+                    type: string
+                    format: "date"
+                ean:
+                    type: string
+                retail:
+                    type: string
+                stock_ajustado:
+                    type: number
+                pvu_ajustado:
+                    type: number
+                doh:
+                    type: number
+                instock:
+                    type: integer
+                    format: "int32"
