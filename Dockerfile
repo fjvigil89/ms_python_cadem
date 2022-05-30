@@ -16,6 +16,6 @@ ENV DB_PASS "Cadem2018"
 
 RUN pip install -r requirements.txt
 
-EXPOSE 80
+EXPOSE 30080
 
 CMD ["python3","./main.py"]
